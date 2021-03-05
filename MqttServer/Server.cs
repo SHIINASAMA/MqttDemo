@@ -15,9 +15,10 @@ namespace MqttServer
 
         public async void Init()
         {
+            Program.window.Log($"{DateTime.Now}:正在启动服务...");
             var optionBuilder = new MqttServerOptionsBuilder().
                 WithDefaultEndpoint().
-                WithDefaultEndpointPort(9966).
+                WithDefaultEndpointPort(9977).
                 WithConnectionValidator(
                 c =>
                 {
@@ -37,18 +38,18 @@ namespace MqttServer
                         passWord = c.Password
                     });
 
-                    Console.WriteLine($"{DateTime.Now}:账号{c.ClientId}已订阅.");
+                    Program.window.Log($"{DateTime.Now}:账号{c.ClientId}已订阅.");
                 }).WithSubscriptionInterceptor(c =>
                 {
                     if (c == null) return;
                     c.AcceptSubscription = true;
-                    Console.WriteLine($"{DateTime.Now}:账号{c.ClientId}发送了消息.");
+                    Program.window.Log($"{DateTime.Now}:账号{c.ClientId}发送了消息.");
                 }).WithApplicationMessageInterceptor(c =>
                 {
                     if (c == null) return;
                     c.AcceptPublish = true;
                     string str = c.ApplicationMessage?.Payload == null ? null : Encoding.UTF8.GetString(c.ApplicationMessage?.Payload);
-                    Console.WriteLine($"{DateTime.Now}:账号{c.ClientId}-{str}.");
+                    Program.window.Log($"{DateTime.Now}:账号{c.ClientId}-\"{str}\".");
                 });
 
             server = new MqttFactory().CreateMqttServer();
@@ -59,11 +60,14 @@ namespace MqttServer
                 if (use != null)
                 {
                     instances.Remove(use);
-                    Console.WriteLine($"{DateTime.Now}:账号{c.ClientId}取消订阅.");
+                    Program.window.Log($"{DateTime.Now}:账号{c.ClientId}取消订阅.");
                 }
             });
 
             await server.StartAsync(optionBuilder.Build());
+
+            Program.window.Log($"{DateTime.Now}:服务启动完成...");
+            Program.window.EnableButton(true);
         }
 
         public void Publish(String msg)

@@ -1,14 +1,22 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MqttServer
 {
-    internal class Program
+    internal static class Program
     {
-        private static void Main(string[] args)
+        public static MainWindow window = null;
+
+        [STAThread]
+        private static void Main()
         {
-            Server server = new();
-            server.Init();
-            Console.ReadLine();
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(window = new MainWindow());
         }
     }
 }

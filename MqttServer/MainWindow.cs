@@ -8,19 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MqttClient
+namespace MqttServer
 {
     public partial class MainWindow : Form
     {
-        private Client client = new Client();
+        private Server server = new();
 
         public MainWindow()
         {
-            //Control.CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
-            button1.Enabled = false;
-
-            client.Init();
+            this.button1.Enabled = false;
         }
 
         public void Log(string str)
@@ -41,8 +38,13 @@ namespace MqttClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            client.Send(this.textBox2.Text);
+            server.Publish(this.textBox2.Text);
             this.textBox2.Clear();
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            server.Init();
         }
     }
 }
