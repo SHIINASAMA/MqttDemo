@@ -1,8 +1,4 @@
-﻿using MQTTnet;
-using MQTTnet.Server;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace MqttServer
 {
@@ -10,6 +6,9 @@ namespace MqttServer
     {
         private static void Main(string[] args)
         {
+            Server server = new();
+            server.Init();
+            Console.ReadLine();
         }
     }
 }
